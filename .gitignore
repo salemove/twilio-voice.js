@@ -4,8 +4,6 @@
 config.yaml
 package-lock.json
 coverage
-dist
-es5
 extension/token.js
 node_modules
 docs
