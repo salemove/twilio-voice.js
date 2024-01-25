@@ -4082,6 +4082,7 @@ var Device = /** @class */ (function (_super) {
      * @param sinkIds - An array of device IDs
      */
     Device.prototype._updateSpeakerSinkIds = function (sinkIds) {
+        var _this = this;
         Array.from(this._soundcache.entries())
             .filter(function (entry) { return entry[0] !== Device.SoundName.Incoming; })
             .forEach(function (entry) { return entry[1].setSinkIds(sinkIds); });
@@ -4089,7 +4090,10 @@ var Device = /** @class */ (function (_super) {
         var call = this._activeCall;
         return call
             ? call._setSinkIds(sinkIds)
-            : Promise.resolve();
+            : new Promise(function (resolve) {
+                _this._calls.map(function (_call) { return _call._setSinkIds(sinkIds); });
+                resolve();
+            });
     };
     Device._defaultSounds = {
         disconnect: { filename: 'disconnect', maxDuration: 3000 },
