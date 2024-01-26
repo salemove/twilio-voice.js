@@ -4082,7 +4082,6 @@ var Device = /** @class */ (function (_super) {
      * @param sinkIds - An array of device IDs
      */
     Device.prototype._updateSpeakerSinkIds = function (sinkIds) {
-        var _this = this;
         Array.from(this._soundcache.entries())
             .filter(function (entry) { return entry[0] !== Device.SoundName.Incoming; })
             .forEach(function (entry) { return entry[1].setSinkIds(sinkIds); });
@@ -4090,10 +4089,7 @@ var Device = /** @class */ (function (_super) {
         var call = this._activeCall;
         return call
             ? call._setSinkIds(sinkIds)
-            : new Promise(function (resolve) {
-                _this._calls.map(function (_call) { return _call._setSinkIds(sinkIds); });
-                resolve();
-            });
+            : Promise.resolve();
     };
     Device._defaultSounds = {
         disconnect: { filename: 'disconnect', maxDuration: 3000 },
@@ -8217,7 +8213,8 @@ PeerConnection.prototype._reassignMasterOutput = function reassignMasterOutput(p
     var masterOutput = pc.outputs.get(masterId);
     pc.outputs.delete(masterId);
     var self = this;
-    var idToReplace = Array.from(pc.outputs.keys())[0] || 'default';
+    var firstEntry = Array.from(pc.outputs.keys())[0];
+    var idToReplace = firstEntry !== null && firstEntry !== undefined ? firstEntry : 'default';
     return masterOutput.audio.setSinkId(idToReplace).then(function () {
         self._disableOutput(pc, idToReplace);
         pc.outputs.set(idToReplace, masterOutput);
@@ -8247,7 +8244,8 @@ PeerConnection.prototype._onAddTrack = function onAddTrack(pc, stream) {
     setAudioSource(audio, stream);
     audio.play();
     // Assign the initial master audio element to a random active output device
-    var deviceId = Array.from(pc.outputs.keys())[0] || 'default';
+    var firstEntry = Array.from(pc.outputs.keys())[0];
+    var deviceId = firstEntry !== null && firstEntry !== undefined ? firstEntry : 'default';
     pc._masterAudioDeviceId = deviceId;
     pc.outputs.set(deviceId, { audio: audio });
     try {
