@@ -1556,11 +1556,8 @@ class Device extends EventEmitter {
     this._callSinkIds = sinkIds;
     const call = this._activeCall;
     return call
-        ? call._setSinkIds(sinkIds)
-        : new Promise(resolve => {
-          this._calls.map(_call => _call._setSinkIds(sinkIds));
-          resolve();
-        });
+      ? call._setSinkIds(sinkIds)
+      : Promise.resolve();
   }
 }
 
