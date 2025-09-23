@@ -122,6 +122,6 @@
     "events": "3.3.0",
     "loglevel": "1.6.7",
     "md5": "2.3.0",
-    "rtcpeerconnection-shim": "1.2.8"
+    "rtcpeerconnection-shim": "1.2.15"
   }
 }
