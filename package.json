@@ -118,7 +118,7 @@
   },
   "dependencies": {
     "@twilio/voice-errors": "1.8.0",
-    "@types/md5": "2.3.2",
+    "@types/md5": "2.3.5",
     "events": "3.3.0",
     "loglevel": "1.9.2",
     "md5": "2.3.0",
